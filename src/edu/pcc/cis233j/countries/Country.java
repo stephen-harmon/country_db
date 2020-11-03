@@ -1,15 +1,26 @@
 package edu.pcc.cis233j.countries;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  * A country in the world
  * @author Cara Tang
+ * @author Stephen Harmon
  */
 public class Country {
+
+
 	private int id;
 	private String name;
 	private long population;
 	private double medianAge;
 	private long coastlineKm;
+	private List<String> languages;
+	
+	
+
 	
 	/**
 	 * Create a Country object with the given properties
@@ -20,6 +31,7 @@ public class Country {
 		this.population = population;
 		this.medianAge = medianAge;
 		this.coastlineKm = coastlineKm;
+		this.languages= new ArrayList<String>();
 	}
 
 	public int getId() {
@@ -40,5 +52,14 @@ public class Country {
 
 	public long getCoastlineKm() {
 		return coastlineKm;
+	}
+	
+	public List<String> getLanguages(){
+		return languages;
+	}
+	
+	public void addLanguage(String language){
+		if (!languages.contains(language))
+			languages.add(language);
 	}
 }

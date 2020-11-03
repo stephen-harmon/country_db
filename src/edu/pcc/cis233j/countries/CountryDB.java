@@ -11,6 +11,8 @@ import java.util.List;
 /**
  * Read data from the Countries database
  * @author Cara Tang
+ * @author Stephen Harmon
+ * @version 11-2-2020
  */
 public class CountryDB {
 	private static final String DB_NAME = "Countries";
@@ -18,8 +20,10 @@ public class CountryDB {
 	private static final String USERNAME = "233jstudent";
 	private static final String PASSWORD = "tnedutsj332";
 	private static final String GET_COUNTRIES_SQL = "SELECT * FROM COUNTRY";
+	private static final String GET_LANGUAGES_SQL= "SELECT * FROM COUNTRY_LANGUAGE WHERE CountryId = ?";
 
 	private List<Country> countries;
+
 
 	/**
 	 * Create a CountryDB object
@@ -58,11 +62,24 @@ public class CountryDB {
 				ResultSet rs = stmt.executeQuery()
 				) {
 			while (rs.next()) {
-				countries.add(new Country(rs.getInt("Id"),
-						rs.getString("Name"),
-						rs.getLong("Population"),
-						rs.getDouble("MedianAge"),
-						rs.getLong("CoastlineKm")));
+				// Create a new country
+				Country country = new Country(rs.getInt("Id"), rs.getString("Name"), rs.getLong("Population"),
+						rs.getDouble("MedianAge"), rs.getLong("CoastlineKm"));
+
+				// Add country to the list of countries
+				countries.add(country);
+
+				// Fetch languages
+				PreparedStatement stmt2 = connection.prepareStatement(GET_LANGUAGES_SQL);
+				stmt2.setInt(1, rs.getInt("Id"));
+				ResultSet rs2 = stmt2.executeQuery();
+
+				// Add languages to the list
+				while (rs2.next()) {
+					country.addLanguage(rs2.getString("Language"));
+				}
+
+
 			}
 		}
 		catch (SQLException e) {
